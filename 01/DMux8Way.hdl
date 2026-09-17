@@ -17,4 +17,10 @@ CHIP DMux8Way {
 
     PARTS:
     // Put your code here:
+    // 1. 第一階段：依據最高位元 sel[2] 決定訊號走向前半區或後半區
+    DMux(in=in, sel=sel[2], a=firstHalf, b=secondHalf);
+
+    // 2. 第二階段：依據低位元 sel[0..1] 將訊號精準分配至 8 個目標之一
+    DMux4Way(in=firstHalf,  sel=sel[0..1], a=a, b=b, c=c, d=d);
+    DMux4Way(in=secondHalf, sel=sel[0..1], a=e, b=f, c=g, d=h);
 }

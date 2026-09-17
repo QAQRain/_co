@@ -17,4 +17,9 @@ CHIP Mux4Way16 {
 
     PARTS:
     // Put your code here:
+    Mux16(a=a, b=b, sel=sel[0], out=ab);
+    Mux16(a=c, b=d, sel=sel[0], out=cd);
+
+    // 2. 第二階段：利用 sel[1] 從兩組結果中挑出最終輸出
+    Mux16(a=ab, b=cd, sel=sel[1], out=out);
 }

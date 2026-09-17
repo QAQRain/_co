@@ -15,4 +15,15 @@ CHIP Mux {
 
     PARTS:
     // Put your code here:
+    // 1. 反轉選擇訊號
+    Not(in=sel, out=notSel);
+
+    // 2. 通道 A：當 sel 為 0 時輸出 a，否則輸出 0
+    And(a=a, b=notSel, out=aOut);
+
+    // 3. 通道 B：當 sel 為 1 時輸出 b，否則輸出 0
+    And(a=b, b=sel, out=bOut);
+
+    // 4. 將兩個通道的結果合併（因為其中一個必定為 0，Or 運算可順利取得非 0 者）
+    Or(a=aOut, b=bOut, out=out);
 }

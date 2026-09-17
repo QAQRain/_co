@@ -14,4 +14,15 @@ CHIP Xor {
 
     PARTS:
     // Put your code here:
+    Or(a=a, b=b ,out=aOrb);
+    And(a=a, b=b, out=aAndb);
+    Not(in=aAndb, out=NotaAndb);
+    And(a=aOrb, b=NotaAndb, out=out);
+
 }
+/*
+(a OR b) AND (NOT(a AND b))
+
+a or b = -(-a and -b)
+and=nand+out
+*/

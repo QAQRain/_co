@@ -15,11 +15,11 @@ CHIP Or {
 
     PARTS:
     // Put your code here:
-    Nand(a=a, b=a, out=notA);
-    Nand(a=b, b=b, out=notB);
+    Not(in=a, out=notA);
+    Not(in=b, out=notB);
     Nand(a=notA, b=notB, out=out);
 }
 /*
-a or b = -(-a and b)
+a or b = -(-a and -b)
 
 */

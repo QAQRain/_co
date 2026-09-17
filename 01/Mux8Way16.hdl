@@ -19,4 +19,10 @@ CHIP Mux8Way16 {
 
     PARTS:
     // Put your code here:
+    // 1. 第一階段：依據 sel[0..1] 分別從 (a,b,c,d) 和 (e,f,g,h) 挑出一組
+    Mux4Way16(a=a, b=b, c=c, d=d, sel=sel[0..1], out=abcd);
+    Mux4Way16(a=e, b=f, c=g, d=h, sel=sel[0..1], out=efgh);
+
+    // 2. 第二階段：依據最高位元 sel[2] 從 abcd 與 efgh 中選出最後輸出
+    Mux16(a=abcd, b=efgh, sel=sel[2], out=out);
 }
