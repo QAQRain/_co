@@ -14,4 +14,6 @@ CHIP Inc16 {
 
     PARTS:
    // Put you code here:
+   // 將輸入 in 與數字 1 (b[0]=true) 相加
+    Add16(a=in, b[0]=true, out=out);
 }

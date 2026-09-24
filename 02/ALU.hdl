@@ -43,4 +43,32 @@ CHIP ALU {
 
     PARTS:
    // Put you code here:
+   // 1. 處理 x 輸入 (zx, nx)
+    Mux16(a=x, b=false, sel=zx, out=x1);
+    Not16(in=x1, out=notX1);
+    Mux16(a=x1, b=notX1, sel=nx, out=x2);
+
+    // 2. 處理 y 輸入 (zy, ny)
+    Mux16(a=y, b=false, sel=zy, out=y1);
+    Not16(in=y1, out=notY1);
+    Mux16(a=y1, b=notY1, sel=ny, out=y2);
+
+    // 3. 執行 f 運算 (And16 或 Add16)
+    And16(a=x2, b=y2, out=andXY);
+    Add16(a=x2, b=y2, out=addXY);
+    Mux16(a=andXY, b=addXY, sel=f, out=fOut);
+
+    // 4. 處理 no 運算並拆分匯流排以供 zr/ng 判斷
+    Not16(in=fOut, out=notFOut);
+    Mux16(a=fOut, b=notFOut, sel=no, 
+          out=out, 
+          out[0..7]=outLow, 
+          out[8..15]=outHigh, 
+          out[15]=ng);
+
+    // 5. 計算 zr 標誌 (檢查 16 個 bit 是否全為 0)
+    Or8Way(in=outLow, out=orLow);
+    Or8Way(in=outHigh, out=orHigh);
+    Or(a=orLow, b=orHigh, out=nonzero);
+    Not(in=nonzero, out=zr);
 }
