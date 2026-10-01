@@ -15,4 +15,9 @@ CHIP Bit {
 
     PARTS:
     // Put your code here:
+    // 1. Mux 根據 load 決定要寫入新值 in，還是保持舊值 dffOut
+    Mux(a=dffOut, b=in, sel=load, out=muxOut);
+
+    // 2. DFF 儲存狀態，並同時將結果輸出至 out 與回傳給 Mux (dffOut)
+    DFF(in=muxOut, out=out, out=dffOut);
 }

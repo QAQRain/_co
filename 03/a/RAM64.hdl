@@ -16,4 +16,23 @@ CHIP RAM64 {
 
     PARTS:
     // Put your code here:
+    // 1. 依據高 3 位元 (address[3..5]) 將 load 訊號分配給 8 個 RAM8 之一
+    DMux8Way(in=load, sel=address[3..5], 
+             a=load0, b=load1, c=load2, d=load3, 
+             e=load4, f=load5, g=load6, h=load7);
+
+    // 2. 8 個 RAM8 晶片，內部定址使用低 3 位元 (address[0..2])
+    RAM8(in=in, load=load0, address=address[0..2], out=r0);
+    RAM8(in=in, load=load1, address=address[0..2], out=r1);
+    RAM8(in=in, load=load2, address=address[0..2], out=r2);
+    RAM8(in=in, load=load3, address=address[0..2], out=r3);
+    RAM8(in=in, load=load4, address=address[0..2], out=r4);
+    RAM8(in=in, load=load5, address=address[0..2], out=r5);
+    RAM8(in=in, load=load6, address=address[0..2], out=r6);
+    RAM8(in=in, load=load7, address=address[0..2], out=r7);
+
+    // 3. 依據高 3 位元 (address[3..5]) 選出正確的 RAM8 輸出
+    Mux8Way16(a=r0, b=r1, c=r2, d=r3, 
+              e=r4, f=r5, g=r6, h=r7, 
+              sel=address[3..5], out=out);
 }
