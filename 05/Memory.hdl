@@ -28,4 +28,22 @@ CHIP Memory {
 
     PARTS:
     // Put your code here:
+    // 1. 根據 address[13..14] 將 load 訊號分配給 RAM16K, Screen, Keyboard
+    DMux4Way(in=load, sel=address[13..14], a=loadRam0, b=loadRam1, c=loadScreen, d=loadKbd);
+
+    // RAM16K 涵蓋 00 和 01 兩個區間 (0~16383)
+    Or(a=loadRam0, b=loadRam1, out=loadRam);
+
+    // 2. 三大硬體模組組裝
+    // RAM16K 採用低 14 位元定址 (address[0..13])
+    RAM16K(in=in, load=loadRam, address=address[0..13], out=outRam);
+
+    // Screen 採用低 13 位元定址 (address[0..12])
+    Screen(in=in, load=loadScreen, address=address[0..12], out=outScreen);
+
+    // Keyboard 唯讀介面
+    Keyboard(out=outKbd);
+
+    // 3. 根據 address[13..14] 選擇對應的資料輸出
+    Mux4Way16(a=outRam, b=outRam, c=outScreen, d=outKbd, sel=address[13..14], out=out);
 }

@@ -40,4 +40,63 @@ CHIP CPU {
 
     PARTS:
     // Put your code here:
+    // ----------------------------------------------------------------
+    // 1. 指令解碼與 A 暫存器控制
+    // ----------------------------------------------------------------
+    Not(in=instruction[15], out=isA);
+    Not(in=isA, out=isC);
+
+    // Mux: 決定進入 A 暫存器的是指令本身還是 ALU 輸出
+    Mux16(a=instruction, b=outALU, sel=isC, out=inA);
+
+    // loadA = isA OR (isC AND d1)
+    And(a=isC, b=instruction[5], out=isCAndD1);
+    Or(a=isA, b=isCAndD1, out=loadA);
+
+    ARegister(in=inA, load=loadA, out=outA, out[0..14]=addressM);
+
+    // ----------------------------------------------------------------
+    // 2. D 暫存器與 ALU 輸入選擇
+    // ----------------------------------------------------------------
+    // loadD = isC AND d2
+    And(a=isC, b=instruction[4], out=loadD);
+    DRegister(in=outALU, load=loadD, out=outD);
+
+    // Mux: 根據 a-bit (instruction[12]) 選擇 ALU 的 Y 輸入是 A 還是 M
+    Mux16(a=outA, b=inM, sel=instruction[12], out=outAorM);
+
+    // ----------------------------------------------------------------
+    // 3. ALU 核心計算
+    // ----------------------------------------------------------------
+    ALU(x=outD, y=outAorM, 
+        zx=instruction[11], nx=instruction[10], 
+        zy=instruction[9],  ny=instruction[8], 
+        f=instruction[7],   no=instruction[6], 
+        out=outALU, out=outM, zr=zr, ng=ng);
+
+    // 寫入 Memory 致能：writeM = isC AND d3
+    And(a=isC, b=instruction[3], out=writeM);
+
+    // ----------------------------------------------------------------
+    // 4. 跳轉邏輯 (PC 控制)
+    // ----------------------------------------------------------------
+    // 判斷結果是否為正數 (pos = NOT zr AND NOT ng)
+    Or(a=zr, b=ng, out=zrOrNg);
+    Not(in=zrOrNg, out=pos);
+
+    // 比對跳轉條件 (j1=inst[2], j2=inst[1], j3=inst[0])
+    And(a=instruction[2], b=ng,  out=jlt); // < 0
+    And(a=instruction[1], b=zr,  out=jeq); // == 0
+    And(a=instruction[0], b=pos, out=jgt); // > 0
+
+    Or(a=jlt, b=jeq, out=jle);
+    Or(a=jle, b=jgt, out=jumpCond);
+
+    // 只有在 C-指令 時跳轉條件才生效
+    And(a=isC, b=jumpCond, out=loadPC);
+
+    // ----------------------------------------------------------------
+    // 5. 程式計數器 (PC)
+    // ----------------------------------------------------------------
+    PC(in=outA, load=loadPC, inc=true, reset=reset, out[0..14]=pc);
 }

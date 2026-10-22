@@ -20,4 +20,21 @@ CHIP Computer {
 
     PARTS:
     // Put your code here:
+    // 1. 程序記憶體 (ROM32K): 存放編譯好的機器碼程式
+    ROM32K(address=pc, out=instruction);
+
+    // 2. 中央處理器 (CPU): 負責解碼、運算、跳轉與控制
+    CPU(inM=inM, 
+        instruction=instruction, 
+        reset=reset, 
+        outM=outM, 
+        writeM=writeM, 
+        addressM=addressM, 
+        pc=pc);
+
+    // 3. 資料記憶體 (Memory): 整合 RAM16K, Screen 與 Keyboard
+    Memory(in=outM, 
+           load=writeM, 
+           address=addressM, 
+           out=inM);
 }
