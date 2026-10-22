@@ -17,4 +17,18 @@ CHIP PC {
 
     PARTS:
     // Put your code here:
+    // 1. 計算 +1 後的值
+    Inc16(in=loopOut, out=incOut);
+
+    // 2. 優先順序 Mux 鏈 (inc -> load -> reset)
+    Mux16(a=loopOut, b=incOut, sel=inc, out=outInc);
+    Mux16(a=outInc, b=in, sel=load, out=outLoad);
+    Mux16(a=outLoad, b=false, sel=reset, out=outReset);
+
+    // 3. 計算 Register 的 load 訊號 (只要有任何操作就觸發寫入)
+    Or(a=inc, b=load, out=or1);
+    Or(a=or1, b=reset, out=loadReg);
+
+    // 4. 儲存狀態，並引出內部回饋訊號 loopOut
+    Register(in=outReset, load=loadReg, out=out, out=loopOut);
 }
