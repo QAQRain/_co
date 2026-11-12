@@ -1,0 +1,24 @@
+// 在 SCREEN 開頭畫 4 個黑點（測試 SCREEN 常數與變數）
+@SCREEN
+D=A
+@addr
+M=D
+@4
+D=A
+@n
+M=D
+(DRAW)
+@addr
+A=M
+M=-1
+@addr
+M=M+1
+@n
+M=M-1
+@n
+D=M
+@DRAW
+D;JGT
+(END)
+@END
+0;JMP
