@@ -1,0 +1,11 @@
+// 函式呼叫與回傳
+function Main.test 0
+push constant 30
+call Main.inc 1
+return
+
+function Main.inc 0
+push argument 0
+push constant 1
+add
+return

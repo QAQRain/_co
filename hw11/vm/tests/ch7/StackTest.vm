@@ -1,0 +1,18 @@
+// 涵蓋比較、temp、pointer、static
+push constant 17
+push constant 17
+eq
+push constant 17
+push constant 16
+gt
+push constant 16
+push constant 17
+lt
+push constant 123
+pop temp 0
+push temp 0
+pop pointer 0
+push pointer 0
+pop static 0
+push static 0
+add

@@ -1,0 +1,4 @@
+function Sys.init 0
+push constant 41
+call Class1.inc 1
+return

@@ -1,0 +1,4 @@
+// 最簡單的堆疊加法
+push constant 7
+push constant 8
+add

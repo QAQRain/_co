@@ -1,0 +1,6 @@
+// 函式與區域變數
+function SimpleFunction.test 2
+push local 0
+push local 1
+add
+return
