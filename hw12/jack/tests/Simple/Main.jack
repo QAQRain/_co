@@ -1,0 +1,27 @@
+// 自製案例：涵蓋第 9 章會遇到的主要文法
+class Main {
+    static int count;
+    field boolean flag;
+
+    constructor Main new(int n) {
+        let count = n;
+        let flag = true;
+        return this;
+    }
+
+    function void main() {
+        var int i;
+        var String s;
+        let i = 0;
+        let s = "hello";
+        while (i < 5) {
+            let i = i + 1;
+        }
+        if (i = 5) {
+            do Output.printString(s);
+        } else {
+            let i = 0;
+        }
+        return;
+    }
+}

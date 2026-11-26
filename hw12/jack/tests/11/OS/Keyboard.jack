@@ -1,0 +1,50 @@
+// 鍵盤：讀取按鍵狀態與字元
+class Keyboard {
+    static int keyboard;
+
+    function void init() {
+        let keyboard = 24576;
+        return;
+    }
+
+    function char keyPressed() {
+        var Array ram;
+        let ram = keyboard;
+        return ram[0];
+    }
+
+    function char readChar() {
+        var char c;
+        while (true) {
+            let c = Keyboard.keyPressed();
+            if (c > 0) {
+                return c;
+            }
+        }
+        return c;
+    }
+
+    function String readLine() {
+        var String line;
+        var char c;
+        let line = String.new(80);
+        while (true) {
+            let c = Keyboard.readChar();
+            if (c = 128) {
+                return line;
+            }
+            if (c = 129) {
+                do line.eraseLastChar();
+            } else {
+                do line.appendChar(c);
+            }
+        }
+        return line;
+    }
+
+    function int readInt() {
+        var String line;
+        let line = Keyboard.readLine();
+        return line.intValue();
+    }
+}

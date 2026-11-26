@@ -1,0 +1,69 @@
+// 輸出：在螢幕上印字與數字
+// 字型簡化：每個字元畫成 5x7 的方塊骨架；足夠讓 Seven／Square／Pong 顯示文字
+class Output {
+    static int cursorX;
+    static int cursorY;
+
+    function void init() {
+        let cursorX = 0;
+        let cursorY = 0;
+        return;
+    }
+
+    function void moveCursor(int x, int y) {
+        let cursorX = x;
+        let cursorY = y;
+        return;
+    }
+
+    function void printChar(char c) {
+        var int row;
+        var int col;
+        if (c = 128) {
+            let cursorX = 0;
+            let cursorY = cursorY + 12;
+            return;
+        }
+        if (c = 129) {
+            let cursorX = cursorX - 6;
+            return;
+        }
+        let row = 0;
+        while (row < 7) {
+            let col = 0;
+            while (col < 5) {
+                do Screen.drawPixel(cursorX + col, cursorY + row);
+                let col = col + 1;
+            }
+            let row = row + 1;
+        }
+        let cursorX = cursorX + 6;
+        return;
+    }
+
+    function void printString(String s) {
+        var int i;
+        var char c;
+        let i = 0;
+        while (i < s.length()) {
+            let c = s.charAt(i);
+            do Output.printChar(c);
+            let i = i + 1;
+        }
+        return;
+    }
+
+    function void printInt(int value) {
+        var String s;
+        let s = String.new(12);
+        do s.setInt(value);
+        do Output.printString(s);
+        do s.dispose();
+        return;
+    }
+
+    function void println() {
+        do Output.printChar(128);
+        return;
+    }
+}

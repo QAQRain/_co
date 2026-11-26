@@ -1,0 +1,88 @@
+// 數學：加減乘除、平方根、絕對值、最大最小
+class Math {
+    function int multiply(int x, int y) {
+        var int sum;
+        var int count;
+        var int sign;
+        let sum = 0;
+        let count = 0;
+        let sign = 1;
+        if (x < 0) {
+            let x = 0 - x;
+            let sign = 0 - sign;
+        }
+        if (y < 0) {
+            let y = 0 - y;
+            let sign = 0 - sign;
+        }
+        while (count < y) {
+            let sum = sum + x;
+            let count = count + 1;
+        }
+        if (sign < 0) {
+            return 0 - sum;
+        }
+        return sum;
+    }
+
+    function int divide(int x, int y) {
+        var int quotient;
+        var int product;
+        var int sign;
+        if (y = 0) {
+            do Sys.error(2);
+        }
+        let sign = 1;
+        if (x < 0) {
+            let x = 0 - x;
+            let sign = 0 - sign;
+        }
+        if (y < 0) {
+            let y = 0 - y;
+            let sign = 0 - sign;
+        }
+        let quotient = 0;
+        let product = y;
+        while (product < x + 1) {
+            let quotient = quotient + 1;
+            let product = product + y;
+        }
+        if (sign < 0) {
+            return 0 - quotient;
+        }
+        return quotient;
+    }
+
+    function int sqrt(int x) {
+        var int guess;
+        if (x < 0) {
+            do Sys.error(3);
+        }
+        let guess = 0;
+        while ((guess * guess) < (x + 1)) {
+            let guess = guess + 1;
+        }
+        return guess - 1;
+    }
+
+    function int abs(int x) {
+        if (x < 0) {
+            return 0 - x;
+        }
+        return x;
+    }
+
+    function int min(int x, int y) {
+        if (x < y) {
+            return x;
+        }
+        return y;
+    }
+
+    function int max(int x, int y) {
+        if (x > y) {
+            return x;
+        }
+        return y;
+    }
+}

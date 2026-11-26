@@ -1,0 +1,130 @@
+// 字串：字元陣列的包裝，支援長度、附加、整數轉換
+class String {
+    field Array chars;
+    field int length;
+    field int capacity;
+
+    constructor String new(int maxLength) {
+        if (maxLength < 1) {
+            do Sys.error(5);
+        }
+        let chars = Array.new(maxLength);
+        let length = 0;
+        let capacity = maxLength;
+        return this;
+    }
+
+    method void dispose() {
+        do chars.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method int length() {
+        return length;
+    }
+
+    method char charAt(int index) {
+        if ((index < 0) | (~(index < length))) {
+            do Sys.error(7);
+        }
+        return chars[index];
+    }
+
+    method void setCharAt(int index, char c) {
+        if ((index < 0) | (~(index < length))) {
+            do Sys.error(7);
+        }
+        let chars[index] = c;
+        return;
+    }
+
+    method void appendChar(char c) {
+        if (~(length < capacity)) {
+            do Sys.error(6);
+        }
+        let chars[length] = c;
+        let length = length + 1;
+        return;
+    }
+
+    method void eraseLastChar() {
+        if (length > 0) {
+            let length = length - 1;
+        }
+        return;
+    }
+
+    method int intValue() {
+        var int value;
+        var int index;
+        var int digit;
+        var char c;
+        var boolean negative;
+        let value = 0;
+        let index = 0;
+        let negative = false;
+        if (length > 0) {
+            let c = chars[0];
+            if (c = 45) {
+                let negative = true;
+                let index = 1;
+            }
+        }
+        while (index < length) {
+            let c = chars[index];
+            let digit = c - 48;
+            if ((digit < 0) | (digit > 9)) {
+                do Sys.error(8);
+            }
+            let value = (value * 10) + digit;
+            let index = index + 1;
+        }
+        if (negative) {
+            return 0 - value;
+        }
+        return value;
+    }
+
+    method void setInt(int value) {
+        var int digit;
+        var int n;
+        var int i;
+        var int j;
+        var char temp;
+        let length = 0;
+        if (value < 0) {
+            do appendChar(45);
+            let value = 0 - value;
+        }
+        let n = value;
+        while (n > 0) {
+            let digit = n - ((n / 10) * 10);
+            do appendChar(digit + 48);
+            let n = n / 10;
+        }
+        if (length = 0) {
+            do appendChar(48);
+        }
+        let i = 0;
+        let j = length - 1;
+        while (i < j) {
+            let temp = chars[i];
+            let chars[i] = chars[j];
+            let chars[j] = temp;
+            let i = i + 1;
+            let j = j - 1;
+        }
+        return;
+    }
+
+    method String newLine() {
+        do appendChar(128);
+        return this;
+    }
+
+    method String backSpace() {
+        do appendChar(129);
+        return this;
+    }
+}

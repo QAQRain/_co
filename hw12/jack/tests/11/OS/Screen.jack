@@ -1,0 +1,103 @@
+// 螢幕：畫點、畫線、畫矩形、清螢幕
+class Screen {
+    static int screen;
+    static int color;
+
+    function void init() {
+        let screen = 16384;
+        let color = 0;
+        return;
+    }
+
+    function void clearScreen() {
+        var int address;
+        let address = screen;
+        while (address < 24576) {
+            do Memory.poke(address, 0);
+            let address = address + 1;
+        }
+        return;
+    }
+
+    function void setColor(int c) {
+        let color = c;
+        return;
+    }
+
+    function int color() {
+        return color;
+    }
+
+    function void drawPixel(int x, int y) {
+        var int word;
+        var int bit;
+        var int mask;
+        var int value;
+        var int i;
+        if ((x < 0) | (x > 511)) {
+            return;
+        }
+        if ((y < 0) | (y > 255)) {
+            return;
+        }
+        let word = screen + (y * 32) + (x / 16);
+        let bit = x - ((x / 16) * 16);
+        let mask = 1;
+        let i = 0;
+        while (i < bit) {
+            let mask = mask * 2;
+            let i = i + 1;
+        }
+        let value = Memory.peek(word);
+        if (color = 0) {
+            let value = value & (~mask);
+        } else {
+            let value = value | mask;
+        }
+        do Memory.poke(word, value);
+        return;
+    }
+
+    function void drawLine(int x1, int y1, int x2, int y2) {
+        var int dx;
+        var int dy;
+        var int steps;
+        var int i;
+        var int x;
+        var int y;
+        let dx = Math.abs(x2 - x1);
+        let dy = Math.abs(y2 - y1);
+        let steps = Math.max(dx, dy);
+        if (steps = 0) {
+            do Screen.drawPixel(x1, y1);
+            return;
+        }
+        let i = 0;
+        while (i < steps + 1) {
+            let x = x1 + ((x2 - x1) * i) / steps;
+            let y = y1 + ((y2 - y1) * i) / steps;
+            do Screen.drawPixel(x, y);
+            let i = i + 1;
+        }
+        return;
+    }
+
+    function void drawRectangle(int x1, int y1, int x2, int y2) {
+        do Screen.drawLine(x1, y1, x2, y1);
+        do Screen.drawLine(x2, y1, x2, y2);
+        do Screen.drawLine(x2, y2, x1, y2);
+        do Screen.drawLine(x1, y2, x1, y1);
+        return;
+    }
+
+    function void drawCircle(int cx, int cy, int r) {
+        var int x;
+        let x = 0 - r;
+        while (x < r + 1) {
+            do Screen.drawPixel(cx + x, cy);
+            do Screen.drawPixel(cx, cy + x);
+            let x = x + 1;
+        }
+        return;
+    }
+}

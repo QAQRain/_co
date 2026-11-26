@@ -1,0 +1,43 @@
+// 記憶體管理：heap 配置與 RAM 直接讀寫
+class Memory {
+    static int heapBase;
+
+    function void init() {
+        let heapBase = 2048;
+        return;
+    }
+
+    function int alloc(int size) {
+        var int base;
+        var int i;
+        if (size < 1) {
+            do Sys.error(4);
+        }
+        let base = heapBase;
+        let i = 0;
+        while (i < size) {
+            do Memory.poke(base + i, 0);
+            let i = i + 1;
+        }
+        let heapBase = heapBase + size;
+        return base;
+    }
+
+    function void deAlloc(int object) {
+        // 精簡實作：不回收，避免 free list 的複雜度
+        return;
+    }
+
+    function int peek(int address) {
+        var Array ram;
+        let ram = address;
+        return ram[0];
+    }
+
+    function void poke(int address, int value) {
+        var Array ram;
+        let ram = address;
+        let ram[0] = value;
+        return;
+    }
+}
